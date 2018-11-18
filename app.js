@@ -9,7 +9,7 @@ const config = {
   channelSecret: process.env.CHANNEL_SECRET,
 };
 
-app.get('/', line.middleware(config), (req, res) => {
+app.post('/', line.middleware(config), (req, res) => {
   console.log(req.body)
   res.sendStatus(200)
 })
