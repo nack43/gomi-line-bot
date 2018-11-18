@@ -9,8 +9,11 @@ const config = {
   channelSecret: process.env.CHANNEL_SECRET,
 };
 
+const client = new line.Client(config);
+
 app.post('/', line.middleware(config), (req, res) => {
-  console.log(req.body)
+  const event = req.body.events[0];
+  client.replyMessage(event.replyToken, { type: 'text', test: event.message.text });
   res.sendStatus(200)
 })
 
