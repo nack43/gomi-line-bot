@@ -22,7 +22,8 @@ app.post('/', line.middleware(config), (req, res) => {
 })
 
 function handleEvent(event) {
-  if (event.type !== 'message' || event.message.type !== 'text' || event.message.text !== 'rubbish') {
+  const regex = new RegExp('^[Rr]ubbish*');
+  if (event.type !== 'message' || event.message.type !== 'text' || !event.message.text.match(regex)) {
     return Promise.resolve(null);
   }
 
