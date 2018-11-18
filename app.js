@@ -1,6 +1,7 @@
 const express = require('express');
 const line = require('@line/bot-sdk');
 const app = express();
+const moment = require('moment');
 
 const port = process.env.PORT || 8080;
 
@@ -9,6 +10,17 @@ const config = {
   channelSecret: process.env.CHANNEL_SECRET,
 };
 
+const BURNABLE = 'Burnable'
+const NOTHING = 'Nothing Today'
+const RUBBISH_TYPE = {
+  0: NOTHING,
+  1: BURNABLE,
+  2: 'Cans/Bottles',
+  3: 'Plastic',
+  4: BURNABLE,
+  5: 'Unburnable',
+  6: NOTHING,
+}
 const client = new line.Client(config);
 
 app.post('/', line.middleware(config), (req, res) => {
@@ -27,9 +39,9 @@ function handleEvent(event) {
     return Promise.resolve(null);
   }
 
-  const room = '1Aです！！'
-  const message = { type: 'text', text: room };
-  return client.replyMessage(event.replyToken, message );
+  const ms = `ROOMS: ${room}\nRUBBISH TYPE: ${RUBBISH_TYPE[moment().day()]}`
+  const msObj = { type: 'text', text: ms };
+  return client.replyMessage(event.replyToken, msObj );
 }
 
 app.listen(port);
