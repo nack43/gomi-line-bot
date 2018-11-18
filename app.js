@@ -12,9 +12,23 @@ const config = {
 const client = new line.Client(config);
 
 app.post('/', line.middleware(config), (req, res) => {
-  const event = req.body.events[0];
-  client.replyMessage(event.replyToken, { type: 'text', test: event.message.text });
-  res.sendStatus(200)
+  Promise
+    .all(req.body.events.map(handleEvent))
+    .then((result) => res.json(result))
+    .catch((err) => {
+      console.log(err);
+      res.status(500).end();
+    });
 })
+
+function handleEvent(event) {
+  if (event.type !== 'message' || event.message.type !== 'text') {
+    return Promise.resolve(null);
+  }
+
+  const echo = { type: 'text', text: event.message.text };
+
+  return client.replyMessage(event.replyToken, echo );
+}
 
 app.listen(port);
