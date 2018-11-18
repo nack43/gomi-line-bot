@@ -2,7 +2,7 @@ const express = require('express');
 const app = express();
 const port = process.env.PORT || 8080;
 
-app.post('/', (req, res) => {
+app.get('/', (req, res) => {
   console.log(req.body)
   res.sendStatus(200)
 })
