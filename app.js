@@ -1,7 +1,7 @@
 const express = require('express');
 const line = require('@line/bot-sdk');
 const app = express();
-const moment = require('moment');
+const moment = require('moment-timezone');
 
 const port = process.env.PORT || 8080;
 
@@ -21,7 +21,17 @@ const RUBBISH_TYPE = {
   5: 'Unburnable',
   6: NOTHING,
 }
+
+ROOM = {
+  0: '2D',
+  1: '1A',
+  2: '1B',
+  3: '2A, 2B',
+  4: '2C',
+}
+
 const client = new line.Client(config);
+const today = moment().tz('Asia/Tokyo');
 
 app.post('/', line.middleware(config), (req, res) => {
   Promise
@@ -38,8 +48,8 @@ function handleEvent(event) {
   if (event.type !== 'message' || event.message.type !== 'text' || !event.message.text.match(regex)) {
     return Promise.resolve(null);
   }
-  const room = '1A'
-  const ms = `ROOMS: ${room}\nRUBBISH TYPE: ${RUBBISH_TYPE[moment().day()]}`
+  const room = ROOM[today.get('isoWeek') % 5]
+  const ms = `ROOM: ${room}\nTYPE: ${RUBBISH_TYPE[today.day()]}`
   const msObj = { type: 'text', text: ms };
   return client.replyMessage(event.replyToken, msObj );
 }
