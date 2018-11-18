@@ -22,7 +22,7 @@ app.post('/', line.middleware(config), (req, res) => {
 })
 
 function handleEvent(event) {
-  if (event.type !== 'message' || event.message.type !== 'text' || event.message.text === 'rubbish') {
+  if (event.type !== 'message' || event.message.type !== 'text' || event.message.text !== 'rubbish') {
     return Promise.resolve(null);
   }
 
