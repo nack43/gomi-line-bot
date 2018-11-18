@@ -38,7 +38,7 @@ function handleEvent(event) {
   if (event.type !== 'message' || event.message.type !== 'text' || !event.message.text.match(regex)) {
     return Promise.resolve(null);
   }
-
+  const room = '1A'
   const ms = `ROOMS: ${room}\nRUBBISH TYPE: ${RUBBISH_TYPE[moment().day()]}`
   const msObj = { type: 'text', text: ms };
   return client.replyMessage(event.replyToken, msObj );
