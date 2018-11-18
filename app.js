@@ -25,7 +25,6 @@ const config = {
 
 const app = express();
 const port = process.env.PORT || 8080;
-const today = moment().tz('Asia/Tokyo');
 const client = new line.Client(config);
 const regex = new RegExp('^[Rr]ubbish*');
 
@@ -33,6 +32,7 @@ function handleEvent(event) {
   if (event.type !== 'message' || event.message.type !== 'text' || !event.message.text.match(regex)) {
     return Promise.resolve(null);
   }
+  const today = moment().tz('Asia/Tokyo');
   const room = ROOM[today.get('isoWeek') % 5];
   const type = RUBBISH_TYPE[today.day()];
   const ms = `ROOM: ${room}\nTYPE: ${type}`;
