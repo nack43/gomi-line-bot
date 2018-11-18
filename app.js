@@ -43,10 +43,6 @@ function handleEvent(event) {
 app.post('/', line.middleware(config), (req, res) => {
   Promise
     .all(req.body.events.map(handleEvent))
-    .then((result) => {
-      console.log(result);
-      res.json(result);
-    })
     .catch((err) => {
       console.log(err);
       res.status(500).end();
