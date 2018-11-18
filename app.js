@@ -22,13 +22,13 @@ app.post('/', line.middleware(config), (req, res) => {
 })
 
 function handleEvent(event) {
-  if (event.type !== 'message' || event.message.type !== 'text') {
+  if (event.type !== 'message' || event.message.type !== 'text' || event.message.text === 'rubbish') {
     return Promise.resolve(null);
   }
 
-  const echo = { type: 'text', text: event.message.text };
-
-  return client.replyMessage(event.replyToken, echo );
+  const room = '1Aです！！'
+  const message = { type: 'text', text: room };
+  return client.replyMessage(event.replyToken, message );
 }
 
 app.listen(port);
