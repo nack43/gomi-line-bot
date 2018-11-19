@@ -12,11 +12,11 @@ const RUBBISH_TYPE = {
   6: 'Nothing Today',
 };
 const ROOM = {
-  0: '2D',
-  1: '1A',
-  2: '1B',
-  3: '2A, 2B',
-  4: '2C',
+  0: '1A',
+  1: '1B',
+  2: '2A, 2B',
+  3: '2C',
+  4: '2D',
 };
 const config = {
   channelAccessToken: process.env.CHANNEL_ACCESS_TOKEN,
@@ -27,13 +27,14 @@ const app = express();
 const port = process.env.PORT || 8080;
 const client = new line.Client(config);
 const regex = new RegExp('^[Rr]ubbish*');
+const baseDate = moment([2018, 10, 12]).tz('Asia/Tokyo');
 
 function handleEvent(event) {
   if (event.type !== 'message' || event.message.type !== 'text' || !event.message.text.match(regex)) {
     return Promise.resolve(null);
   }
   const today = moment().tz('Asia/Tokyo');
-  const room = ROOM[today.get('isoWeek') % 5];
+  const room = ROOM[today.diff(baseDate, 'week') % 5];
   const type = RUBBISH_TYPE[today.day()];
   const ms = `ROOM: ${room}\nTYPE: ${type}`;
   const msObj = { type: 'text', text: ms };
