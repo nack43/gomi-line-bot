@@ -27,13 +27,13 @@ const app = express();
 const port = process.env.PORT || 8080;
 const client = new line.Client(config);
 const regex = new RegExp('^[Rr]ubbish*');
-const baseDate = moment([2018, 10, 12]).tz('Asia/Tokyo');
 
 function handleEvent(event) {
   if (event.type !== 'message' || event.message.type !== 'text' || !event.message.text.match(regex)) {
     return Promise.resolve(null);
   }
   const today = moment().tz('Asia/Tokyo');
+  const baseDate = moment([2018, 10, 12]).tz('Asia/Tokyo');
   const room = ROOM[today.diff(baseDate, 'week') % 5];
   const type = RUBBISH_TYPE[today.day()];
   const ms = `ROOM: ${room}\nTYPE: ${type}`;
